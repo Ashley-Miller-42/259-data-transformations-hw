@@ -1,7 +1,7 @@
 #PSYC 259 Homework 2 - Data Transformation
 #For full credit, provide answers for at least 7/10
 
-#List names of students collaborating with: 
+#List names of students collaborating with: Just me (Ashley)
 
 ### SETUP: RUN THIS BEFORE STARTING ----------
 
@@ -17,6 +17,9 @@ ds <- read_csv("data_raw/rolling_stone_500.csv")
 
 #ANSWER
 
+glimpse(ds)
+ds$Year<- as.numeric(ds$Year)
+typeof(year)
 
 ### Question 2 ---------- 
 
@@ -24,6 +27,12 @@ ds <- read_csv("data_raw/rolling_stone_500.csv")
 # change ds so that all of the variables are lowercase
 
 #ANSWER
+
+library(dplyr)
+library(janitor)
+
+ds<- ds %>% rename_with(tolower)
+glimpse(ds)
 
 ### Question 3 ----------
 
@@ -33,11 +42,20 @@ ds <- read_csv("data_raw/rolling_stone_500.csv")
 
 #ANSWER
 
+?floor
+
+ds <- ds %>% mutate(decade = floor(year/10) * 10)
+glimpse(ds)
+
+#Not sure if this is right, but I found a similar formula to divide and multiply in stack overflow.
+
 ### Question 4 ----------
 
 # Sort the dataset by rank so that 1 is at the top
 
 #ANSWER
+
+arrange(ds, (rank))
 
 ### Question 5 ----------
 
@@ -45,6 +63,10 @@ ds <- read_csv("data_raw/rolling_stone_500.csv")
 # That just has the artists and songs for the top 10 songs
 
 #ANSWER
+
+top10<- filter(ds, rank < 11)
+glimpse(top10)
+select(top10, artist, song)
 
 
 ### Question 6 ----------
@@ -54,6 +76,12 @@ ds <- read_csv("data_raw/rolling_stone_500.csv")
 
 #ANSWER
 
+ds_sum<- ds %>% summarize(earliest_year = min(year, na.rm = T),
+                average_year = mean(year, na.rm = T),
+                recent_year = max(year, na.rm = T))
+
+glimpse(ds_sum)
+
 
 ### Question 7 ----------
 
@@ -62,6 +90,8 @@ ds <- read_csv("data_raw/rolling_stone_500.csv")
 # Use one filter command only, and sort the responses by year
 
 #ANSWER
+
+filter(ds, year%in% c("1879", "1980", "2020")) 
 
 
 ### Question 8 ---------- 
